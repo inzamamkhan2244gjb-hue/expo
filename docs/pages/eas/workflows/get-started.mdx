@@ -1,188 +1,132 @@
----
-title: Get started with EAS Workflows
-sidebar_title: Get started
-description: Learn how to use EAS Workflows to automate your React Native CI/CD development and release processes.
-searchRank: 10
----
+// MASTI HUB - 15 GAMES - FINAL - NO SPIN ONLY BET - ALL GAMES READY
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
-import { Prerequisites, Requirement } from '~/ui/components/Prerequisites';
-import { Terminal } from '~/ui/components/Snippet';
-import { Step } from '~/ui/components/Step';
+const GAMES_DATA = {
+  teenpatti: { name: 'Teen Patti', items: [{id:'trail',e:'👑',x:15,label:'Trail'},{id:'pseq',e:'🃏',x:10,label:'Pure Seq'},{id:'seq',e:'📜',x:5,label:'Sequence'},{id:'color',e:'🎨',x:5,label:'Color'},{id:'pair',e:'👬',x:5,label:'Pair'},{id:'high',e:'🅰️',x:5,label:'High Card'},{id:'p2',e:'P2',x:5,label:'Player 2'},{id:'p3',e:'P3',x:10,label:'Player 3'}] },
+  lucky777: { name: 'Lucky777', items: [{id:'777',e:'7️⃣',x:15,label:'777'},{id:'bar',e:'🎰',x:10,label:'BAR'},{id:'cherry',e:'🍒',x:5,label:'Cherry'},{id:'bell',e:'🔔',x:5,label:'Bell'},{id:'lemon',e:'🍋',x:5,label:'Lemon'},{id:'orange',e:'🍊',x:5,label:'Orange'},{id:'plum',e:'🍇',x:10,label:'Plum'},{id:'watermelon',e:'🍉',x:15,label:'Watermelon'}] },
+  greedybaby: { name: 'GreedyBaby', items: [{id:'bottle',e:'🍼',x:5,label:'Bottle'},{id:'apple',e:'🍎',x:5,label:'Apple'},{id:'mango',e:'🥭',x:5,label:'Mango'},{id:'strawberry',e:'🍓',x:5,label:'Strawberry'},{id:'lemon',e:'🍋',x:5,label:'Lemon'},{id:'cookie',e:'🍪',x:10,label:'Cookie'},{id:'chicken',e:'🍗',x:15,label:'Chicken'},{id:'pizza',e:'🍕',x:15,label:'Pizza'}] },
+  greedyfarm: { name: 'GreedyFarm', items: [{id:'baingan',e:'🍆',x:5,label:'Baingan'},{id:'tamatar',e:'🍅',x:5,label:'Tamatar'},{id:'gajar',e:'🥕',x:5,label:'Gajar'},{id:'aloo',e:'🥔',x:5,label:'Aloo'},{id:'gobhi',e:'🥦',x:5,label:'Gobhi'},{id:'kaddu',e:'🎃',x:10,label:'Kaddu'},{id:'makka',e:'🌽',x:15,label:'Makka'},{id:'mirchi',e:'🌶️',x:15,label:'Mirchi'}] },
+  super77: { name: 'Super77Pro', items: [{id:'red',e:'🔴',x:5,label:'RED'},{id:'black',e:'⚫',x:5,label:'BLACK'},{id:'even',e:'2️⃣',x:5,label:'EVEN'},{id:'odd',e:'1️⃣',x:5,label:'ODD'},{id:'7',e:'7️⃣',x:10,label:'Number 7'},{id:'77',e:'777',x:15,label:'77 Jackpot'},{id:'low',e:'⬇️',x:5,label:'1-18'},{id:'high',e:'⬆️',x:5,label:'19-36'}] },
+  crazyfruit: { name: 'CrazyFruit', items: [{id:'orange',e:'🍊',x:5,label:'Orange'},{id:'apple',e:'🍎',x:5,label:'Apple'},{id:'mango',e:'🥭',x:5,label:'Mango'},{id:'straw',e:'🍓',x:5,label:'Strawberry'},{id:'lemon',e:'🍋',x:5,label:'Lemon'},{id:'grape',e:'🍇',x:10,label:'Grape'},{id:'cherry',e:'🍒',x:10,label:'Cherry'},{id:'watermelon',e:'🍉',x:15,label:'Watermelon'}] },
+  fishing: { name: 'Fishing', items: [{id:'clown',e:'🐠',x:5,label:'ClownFish'},{id:'puffer',e:'🐡',x:5,label:'Puffer'},{id:'turtle',e:'🐢',x:5,label:'Turtle'},{id:'jelly',e:'🪼',x:5,label:'Jelly'},{id:'octo',e:'🐙',x:10,label:'Octopus'},{id:'crab',e:'🦀',x:10,label:'Crab'},{id:'whale',e:'🐳',x:15,label:'Whale'},{id:'shark',e:'🦈',x:15,label:'Shark'}] },
+  giftwheel: { name: 'GiftWheel', items: [{id:'box1',e:'🎁',x:5,label:'Gift 1'},{id:'box2',e:'🎀',x:5,label:'Gift 2'},{id:'box3',e:'💝',x:5,label:'Gift 3'},{id:'box4',e:'🎊',x:5,label:'Gift 4'},{id:'gold',e:'🏆',x:10,label:'Gold Gift'},{id:'diamond',e:'💎',x:10,label:'Diamond'},{id:'jackpot',e:'👑',x:15,label:'Jackpot'},{id:'mega',e:'💰',x:15,label:'Mega Win'}] },
+  crazygems: { name: 'CrazyGems', items: [{id:'green',e:'🟢',x:5,label:'Emerald'},{id:'blue',e:'🔵',x:5,label:'Blue Gem'},{id:'red',e:'🔴',x:5,label:'Ruby'},{id:'yellow',e:'🟡',x:5,label:'Topaz'},{id:'purple',e:'🟣',x:10,label:'Amethyst'},{id:'pink',e:'💎',x:10,label:'Diamond'},{id:'mask',e:'👺',x:15,label:'Aztec Mask'},{id:'goldmask',e:'🏆',x:15,label:'Gold Mask'}] },
+  original777: { name: 'Original777', items: [{id:'cherry',e:'🍒',x:5,label:'Cherry'},{id:'lemon',e:'🍋',x:5,label:'Lemon'},{id:'orange',e:'🍊',x:5,label:'Orange'},{id:'plum',e:'🫐',x:5,label:'Plum'},{id:'bar',e:'🍫',x:10,label:'BAR'},{id:'bell',e:'🔔',x:10,label:'Bell'},{id:'seven',e:'7️⃣',x:15,label:'Seven'},{id:'triple7',e:'777',x:15,label:'Triple 7'}] },
+  olympus: { name: 'GateOfOlympus', items: [{id:'ring',e:'💍',x:5,label:'Ring'},{id:'hour',e:'⏳',x:5,label:'Hourglass'},{id:'chalice',e:'🏆',x:5,label:'Chalice'},{id:'crown',e:'👑',x:10,label:'Crown'},{id:'gem1',e:'🔷',x:5,label:'Blue Gem'},{id:'gem2',e:'🔶',x:5,label:'Gold Gem'},{id:'zeus',e:'⚡',x:15,label:'Zeus'},{id:'bolt',e:'🌩️',x:15,label:'Thunder'}] },
+  fortunelamp: { name: 'FortuneLamp', items: [{id:'coin',e:'🪙',x:5,label:'Gold Coin'},{id:'lamp2',e:'🧞',x:5,label:'Genie'},{id:'carpet',e:'🧶',x:5,label:'Carpet'},{id:'pot',e:'🏺',x:5,label:'Pot'},{id:'diamond',e:'💎',x:10,label:'Diamond'},{id:'ruby',e:'♦️',x:10,label:'Ruby'},{id:'lamp',e:'🪔',x:15,label:'Magic Lamp'},{id:'treasure',e:'💰',x:15,label:'Treasure'}] },
+  luckywinner: { name: 'LuckyWinnerPro', items: [{id:'crown',e:'👑',x:5,label:'Crown'},{id:'star',e:'⭐',x:5,label:'Star'},{id:'bar',e:'🎰',x:5,label:'BAR'},{id:'bell',e:'🔔',x:5,label:'Bell'},{id:'seven',e:'7️⃣',x:10,label:'Seven'},{id:'777',e:'777',x:10,label:'777'},{id:'jackpot',e:'💰',x:15,label:'Jackpot'},{id:'winner',e:'🏆',x:15,label:'Winner'}] },
+  greedytreasure: { name: 'GreedyTreasure', items: [{id:'coins',e:'🪙',x:5,label:'Coins'},{id:'pearl',e:'⚪',x:5,label:'Pearl'},{id:'sapphire',e:'💙',x:10,label:'Sapphire'},{id:'emerald',e:'💚',x:10,label:'Emerald'},{id:'ruby',e:'❤️',x:15,label:'Ruby'},{id:'diamond',e:'💎',x:10,label:'Diamond'},{id:'gold',e:'🪙',x:15,label:'Gold Bar'},{id:'chest',e:'📦',x:15,label:'Chest'}] },
+  yummy: { name: 'Yummy', items: [{id:'burger',e:'🍔',x:10,label:'Burger'},{id:'pizza',e:'🍕',x:5,label:'Pizza'},{id:'fries',e:'🍟',x:5,label:'Fries'},{id:'hotdog',e:'🌭',x:5,label:'Hotdog'},{id:'donut',e:'🍩',x:10,label:'Donut'},{id:'ice',e:'🍦',x:10,label:'Ice Cream'},{id:'sandwich',e:'🥪',x:5,label:'Sandwich'},{id:'chicken',e:'🍗',x:15,label:'Chicken Leg'}] },
+};
 
-This page walks you through creating your first EAS Workflow: development builds of your app for Android emulators, iOS simulators, physical devices, and production builds for the app stores.
+const GAMES = [
+  {id:'teenpatti', name:'Teen Patti', emoji:'🃏'},
+  {id:'lucky777', name:'Lucky777', emoji:'7️⃣'},
+  {id:'greedybaby', name:'GreedyBaby', emoji:'👶', ready:true},
+  {id:'greedyfarm', name:'GreedyFarm', emoji:'🚜'},
+  {id:'super77', name:'Super77Pro', emoji:'🎰'},
+  {id:'crazyfruit', name:'CrazyFruit', emoji:'🍎', ready:true},
+  {id:'fishing', name:'Fishing', emoji:'🎣', ready:true},
+  {id:'giftwheel', name:'GiftWheel', emoji:'🎁'},
+  {id:'crazygems', name:'CrazyGems', emoji:'💎'},
+  {id:'original777', name:'Original777', emoji:'777'},
+  {id:'olympus', name:'GateOfOlympus', emoji:'⚡'},
+  {id:'fortunelamp', name:'FortuneLamp', emoji:'🪔'},
+  {id:'luckywinner', name:'LuckyWinnerPro', emoji:'🏆'},
+  {id:'greedytreasure', name:'GreedyTreasure', emoji:'💰'},
+  {id:'yummy', name:'Yummy', emoji:'🍔', new:true, ready:true},
+];
 
-## Get started
+export default function App(){
+  const [screen,setScreen]=useState('lobby');
+  const [coins,setCoins]=useState(4715);
 
-<Prerequisites>
-  <Requirement title="Sign up for an Expo account">
-    You'll need to [sign up](https://expo.dev/signup) for an Expo account.
-  </Requirement>
-  <Requirement title="Create a project">
-    You'll need to create a project with the following command:
+  if(screen==='lobby'){
+    return (
+      <View style={s.main}>
+        <View style={s.head}><Text style={s.htitle}>Lucky Games</Text><Text style={s.coin}>💰 {coins}</Text></View>
+        <ScrollView contentContainerStyle={s.grid}>
+          {GAMES.map(g=>(
+            <TouchableOpacity key={g.id} style={s.card} onPress={()=>setScreen(g.id)}>
+              <View style={[s.icon, {borderColor:'gold',borderWidth:1}]}><Text style={{fontSize:28}}>{g.emoji}</Text>
+                {g.new&&<View style={s.newB}><Text style={s.newT}>NEW</Text></View>}
+                <View style={s.readyB}><Text style={s.readyT}>BET</Text></View>
+              </View>
+              <Text style={s.gname}>{g.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        <Text style={s.hint}>✅ All 15 Games - BET ONLY System - NO SPIN</Text>
+      </View>
+    )
+  }
 
-    <Terminal
-      cmd={{
-        npm: ['$ npx create-expo-app@latest --template default@sdk-57'],
-        yarn: ['$ yarn create expo-app --template default@sdk-57'],
-        pnpm: ['$ pnpm create expo-app --template default@sdk-57'],
-        bun: ['$ bun create expo --template default@sdk-57'],
-      }}
-    />
+  return <BetGame gameId={screen} gameInfo={GAMES_DATA[screen]} coins={coins} setCoins={setCoins} back={()=>setScreen('lobby')} />
+}
 
-  </Requirement>
-  <Requirement title="Install EAS CLI">
-    You'll need to install EAS CLI to create and run workflows:
+function BetGame({gameId, gameInfo, coins, setCoins, back}){
+  const [chip,setChip]=useState(1000);
+  const [bets,setBets]=useState({});
+  const [time,setTime]=useState(10);
 
-    <Terminal cmd={['$ npm install -g eas-cli']} />
+  useEffect(()=>{
+    const t=setInterval(()=>{
+      setTime(v=>{
+        if(v<=1){
+          const win=gameInfo.items[Math.floor(Math.random()*gameInfo.items.length)];
+          if(bets[win.id]){ setCoins(c=>c + bets[win.id]*win.x); alert(`WIN! ${win.e} ${win.label} x${win.x} = +${bets[win.id]*win.x}`); }
+          setBets({}); return 10;
+        } return v-1;
+      })
+    },1000); return ()=>clearInterval(t);
+  },[bets, gameInfo]);
 
-  </Requirement>
-</Prerequisites>
+  const placeBet=(id)=>{
+    if(time<=2) return alert('BET TIME KHATAM! Agle round ka wait karo');
+    if(coins<chip) return alert('Coin khatam!');
+    setCoins(c=>c-chip); setBets(p=>({...p,[id]:(p[id]||0)+chip}));
+  }
 
-<Step label="1">
+  return (
+    <View style={s.main}>
+      <View style={s.head}><TouchableOpacity onPress={back}><Text style={{fontWeight:'900'}}>←</Text></TouchableOpacity><Text style={s.htitle}>{gameInfo.name.toUpperCase()} - BET ONLY</Text><Text style={s.coin}>💰{coins}</Text></View>
+      <Text style={s.betTime}>BET TIME: {time}s {time<=2&&'🔒 BET CLOSED'}</Text>
+      <Text style={{textAlign:'center',fontSize:50, marginTop:5}}>{GAMES.find(g=>g.id===gameId)?.emoji}</Text>
+      <View style={{flexDirection:'row',flexWrap:'wrap',justifyContent:'center',padding:5}}>
+        {gameInfo.items.map(f=>(
+          <TouchableOpacity key={f.id} onPress={()=>placeBet(f.id)} style={[s.fCard, bets[f.id]&&{borderColor:'gold',borderWidth:3,backgroundColor:'#FFF9C4'}]}>
+            <Text style={{fontSize:32}}>{f.e}</Text>
+            <Text style={{fontWeight:'900',color:'#E65100'}}>x{f.x}</Text>
+            <Text style={{fontSize:9,fontWeight:'700'}}>{f.label}</Text>
+            {bets[f.id]&&<Text style={s.betAmt}>₹{bets[f.id]}</Text>}
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={s.chipRow}>
+        {[100,1000,10000,50000,100000].map(v=>(
+          <TouchableOpacity key={v} onPress={()=>setChip(v)} style={[s.chip, chip===v&&{backgroundColor:'#66BB6A',transform:[{scale:1.15}]}]}>
+            <Text style={s.chipT}>{v>=1000?v/1000+'K':v}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <Text style={{textAlign:'center',fontSize:10,color:'green',fontWeight:'900',marginTop:4}}>✅ NO SPIN - Chip Chuno → Dabao → Bet Lag Gaya! Mango/Strawberry/Lemon Ready!</Text>
+    </View>
+  )
+}
 
-Run the following command to create a workflow that creates development builds for Android and iOS:
-
-<Terminal cmd={['$ eas workflow:create --template build']} />
-
-Then follow the prompts and the `[Action requested]` steps when they appear. The command generates a workflow file at **.eas/workflows/build.yml** and sets up your project for building on EAS.
-
-</Step>
-
-<Step label="2">
-
-Run the workflow with the following command:
-
-<Terminal cmd={['$ eas workflow:run .eas/workflows/build.yml']} />
-
-Once you do, you can watch your workflow run on your project's [workflows page](https://expo.dev/accounts/[account]/projects/[projectName]/workflows).
-
-</Step>
-
-<Step label="3">
-
-When the builds finish, you can install them on your physical devices via the website UI. You can also run the following commands to install the latest builds on your Android Emulator and iOS Simulator:
-
-<Terminal cmd={['$ eas build:run -p android --latest']} />
-
-<Terminal cmd={['$ eas build:run -p ios -e development-ios-simulator --latest']} />
-
-Then, start a development server so the development build can load your app:
-
-<Terminal cmd={['$ npx expo start']} />
-
-</Step>
-
-## Create production builds
-
-When you're ready to build for the app stores, generate a release workflow with the `deploy` template:
-
-<Terminal cmd={['$ eas workflow:create --template deploy']} />
-
-This sets up your project for automated deployment: it configures EAS Build and EAS Update and sets your app identifiers, then writes a complete release workflow to **.eas/workflows/deploy.yml**.
-
-When you run it, the workflow fingerprints your project, then builds and submits a new production build when there are native changes so they're ready for submission, or publishes an over-the-air update when a matching build already exists, which will be sent to your users immediately.
-
-For a walkthrough of the generated workflow, see the [Deploy to production example](/eas/workflows/examples/deploy-to-production).
-
-If you only need to create production builds, use a workflow with a `build` job for each platform:
-
-```yaml .eas/workflows/create-production-builds.yml
-name: Create Production Builds
-
-jobs:
-  build_android:
-    type: build # This job type creates a production build for Android
-    params:
-      platform: android
-      profile: production
-  build_ios:
-    type: build # This job type creates a production build for iOS
-    params:
-      platform: ios
-      profile: production
-```
-
-This workflow uses the `production` profile from your **eas.json**. Production builds require app signing credentials. Set them up for each platform with the following commands:
-
-<Terminal cmd={['$ eas credentials:configure-build -p android -e production']} />
-
-<Terminal cmd={['$ eas credentials:configure-build -p ios -e production']} />
-
-Then, run the workflow:
-
-<Terminal cmd={['$ eas workflow:run .eas/workflows/create-production-builds.yml']} />
-
-## More
-
-### Automate workflows with GitHub events
-
-You can trigger a workflow by pushing a commit to your GitHub repository. You can link a GitHub repo to your EAS project with the following steps:
-
-- Navigate to your project's [GitHub settings](https://expo.dev/accounts/%5Baccount%5D/projects/%5BprojectName%5D/github).
-- Follow the UI to install the GitHub app.
-- Select the GitHub repository that matches the Expo project and connect it.
-
-Then, add the [`on` trigger](/eas/workflows/syntax/#on) to your workflow file. For example, if you want to trigger the workflow when a commit is pushed to the `main` branch, you can add the following:
-
-```yaml .eas/workflows/create-production-builds.yml
-name: Create Production Builds
-
-# @info #
-on:
-  push:
-    branches: ['main']
-  # @end #
-
-jobs:
-  build_android:
-    type: build
-    params:
-      platform: android
-      profile: production
-  build_ios:
-    type: build
-    params:
-      platform: ios
-      profile: production
-```
-
-### Trigger workflows from App Store Connect events
-
-You can also trigger workflows from App Store Connect events using [`on.app_store_connect`](/eas/workflows/syntax/#onapp_store_connect).
-
-Before using App Store Connect triggers, configure your App Store Connect connection in EAS dashboard:
-
-- Open EAS dashboard and select your project.
-- Navigate to **[Project settings > General > Connections](https://expo.dev/accounts/[account]/projects/[project]/settings)**.
-- Connect your App Store Connect app.
-
-Example workflow:
-
-```yaml .eas/workflows/app-store-connect-events.yml
-name: React to App Store Connect events
-
-# @info #
-on:
-  app_store_connect:
-    app_version:
-      states:
-        - ready_for_review
-        - waiting_for_review
-  # @end #
-
-jobs:
-  send_slack_notification:
-    type: slack
-    environment: production
-    params:
-      webhook_url: ${{ env.SLACK_WEBHOOK_URL }}
-      message: 'App version is ready for review or waiting for review.'
-```
-
-The example reads the webhook URL from a `SLACK_WEBHOOK_URL` [environment variable](/eas/environment-variables/manage/#manage-environment-variables). [Create it](https://expo.dev/accounts/[account]/settings/environment-variables) in the `production` environment before running the workflow.
-
-### VS Code extension
-
-Download the [Expo Tools VS Code extension](https://marketplace.visualstudio.com/items?itemName=expo.vscode-expo-tools) to get descriptions and autocompletions for your workflow files.
-
-> Got feedback or feature requests? Send us an email at workflows@expo.dev.
+const s=StyleSheet.create({
+  main:{flex:1,backgroundColor:'white',paddingTop:35},
+  head:{flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:12,backgroundColor:'#FFF',elevation:4},
+  htitle:{fontWeight:'900',fontSize:12}, coin:{fontWeight:'900',color:'#FF6F00',fontSize:16},
+  grid:{flexDirection:'row',flexWrap:'wrap',padding:10}, card:{width:'25%',alignItems:'center',marginBottom:16},
+  icon:{width:62,height:62,backgroundColor:'#E3F2FD',borderRadius:14,justifyContent:'center',alignItems:'center'},
+  gname:{fontSize:10,marginTop:5,fontWeight:'600'}, newB:{position:'absolute',top:-6,right:-6,backgroundColor:'red',borderRadius:6,paddingHorizontal:4}, newT:{color:'white',fontSize:8,fontWeight:'900'},
+  readyB:{position:'absolute',bottom:-6,backgroundColor:'green',borderRadius:4,paddingHorizontal:4}, readyT:{color:'white',fontSize:7,fontWeight:'900'},
+  hint:{textAlign:'center',color:'green',fontSize:11,padding:8, fontWeight:'900'}, back:{padding:15}, bigBtn:{backgroundColor:'#FF6F00',padding:12,borderRadius:10,marginTop:15}, bigBtnT:{color:'white',fontWeight:'900'},
+  betTime:{textAlign:'center',fontSize:20,fontWeight:'900',color:'#FF6F00',marginTop:5},
+  fCard:{width:84,height:84,backgroundColor:'#F5F5F5',margin:4,borderRadius:12,alignItems:'center',justifyContent:'center',elevation:2},
+  betAmt:{fontSize:10,backgroundColor:'black',color:'yellow',borderRadius:4,paddingHorizontal:3,marginTop:2},
+  chipRow:{flexDirection:'row',justifyContent:'space-around',backgroundColor:'#1A237E',padding:10,margin:10,borderRadius:12},
+  chip:{width:48,height:48,borderRadius:24,backgroundColor:'#42A5F5',justifyContent:'center',alignItems:'center',borderWidth:2,borderColor:'white'}, chipT:{color:'white',fontWeight:'900',fontSize:12}
+});
